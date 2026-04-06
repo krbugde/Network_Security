@@ -1,3 +1,5 @@
+from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import r2_score
 import yaml
 from networksecurity.exception.exception import CustomException
 from networksecurity.logging.logger import logging
@@ -124,4 +126,97 @@ def save_object(file_path: str, obj: object) -> None:
     except Exception as e:
         # If any error occurs, raise detailed CustomException
         # showing file name, line number and error message
+        raise CustomException(e, sys)
+    
+
+def load_object(file_path:str)->object:
+    try:
+        if not os.path.exists(file_path):
+            raise Exception(f"The file {file_path} does not exists")
+        with open(file_path,"rb")as file_obj:
+            print(file_obj)
+            return pickle.load(file_obj)
+        
+    except Exception as e:
+        raise CustomException(e,sys)
+    
+def load_numpy_array(file_path:str)->np.array:
+    try:
+        with open(file_path,"rb")as file_obj:
+            return np.load(file_obj)
+    except Exception as e:
+        raise CustomException(e,sys)
+    
+
+def evaluate_models(X_train, y_train, X_test, y_test, models, param):
+    """
+    Trains multiple models, performs hyperparameter tuning using GridSearchCV,
+    evaluates them on test data, and returns a dictionary mapping:
+    
+    model_name -> {"score": test_R2_score, "model": trained_model_object}
+    
+    Parameters:
+        X_train, y_train : np.array : Training data
+        X_test, y_test   : np.array : Test data
+        models           : dict : {model_name: model_object}
+        param            : dict : {model_name: hyperparameter_grid}
+    
+    Returns:
+        dict : {model_name: {"score": test_R2_score, "model": trained_model_object}}
+    """
+
+    try:
+        # empty dictionary to store each model's name → score + trained model object
+        report = {}
+
+        # loop through each model name and model object directly using .items()
+        # cleaner than the previous index-based loop (no need for list()[i])
+        for model_name, model in models.items():
+
+            # log which model is currently being trained and tuned
+            logging.info(f"Training and tuning model: {model_name}")
+
+            # create GridSearchCV to try all hyperparameter combinations
+            # estimator  → the model to tune
+            # param_grid → hyperparameter options for this specific model
+            # cv=3       → 3-fold cross validation to evaluate each combination
+            # n_jobs=-1  → use all CPU cores to speed up the search
+            # verbose=0  → don't print anything during search (silent mode)
+            grid = GridSearchCV(
+                estimator=model,
+                param_grid=param[model_name],
+                cv=3,
+                n_jobs=-1,
+                
+            )
+
+            # run the grid search on training data to find best hyperparameters
+            grid.fit(X_train, y_train)
+
+            # get the best model directly from GridSearchCV
+            # best_estimator_ → already trained model with best hyperparameters found
+            best_model = grid.best_estimator_
+
+            # predict on test data using the best trained model
+            y_test_pred = best_model.predict(X_test)
+
+            # calculate R² score on test data
+            # R² close to 1.0 → model predicts very well
+            # R² close to 0.0 → model is no better than guessing the mean
+            test_score = r2_score(y_test, y_test_pred)
+
+            # save BOTH the score AND the trained model object in the report
+            # this is BETTER than the previous version which only saved the score
+            # now we can directly use the model object later without retraining
+            # e.g., report["Random Forest"] = {"score": 0.91, "model": <trained model>}
+            report[model_name] = {"score": test_score, "model": best_model}
+
+            # log the model name and its test score for tracking
+            logging.info(f"{model_name} | Test R2 Score: {test_score}")
+
+        # return the complete report with all model names, scores and model objects
+        return report
+
+    except Exception as e:
+        # if anything goes wrong, raise a clear custom error with traceback info
         raise CustomException(e, sys)

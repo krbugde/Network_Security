@@ -1,0 +1,47 @@
+[ 2026-04-06 21:32:27,734 ] 35 root - INFO - Data Ingestion started
+[ 2026-04-06 21:32:29,952 ] 131 root - INFO - Performed train test split on the dataframe
+[ 2026-04-06 21:32:29,953 ] 133 root - INFO - Exited split_data_as_train_test method of Data_Ingestion class
+[ 2026-04-06 21:32:29,953 ] 140 root - INFO - Exporting train and test file path.
+[ 2026-04-06 21:32:30,018 ] 149 root - INFO - Exported train and test file path.
+[ 2026-04-06 21:32:30,019 ] 41 root - INFO - Data Ingestion completed
+[ 2026-04-06 21:32:30,019 ] 51 root - INFO - Data Validation started
+[ 2026-04-06 21:32:30,027 ] 181 root - INFO - Data Validation started
+[ 2026-04-06 21:32:30,142 ] 190 root - INFO - Train and Test data loaded successfully
+[ 2026-04-06 21:32:30,142 ] 69 root - INFO - Required no of columns: 2
+[ 2026-04-06 21:32:30,142 ] 70 root - INFO - DataFrame has total columns: 31
+[ 2026-04-06 21:32:30,142 ] 69 root - INFO - Required no of columns: 2
+[ 2026-04-06 21:32:30,142 ] 70 root - INFO - DataFrame has total columns: 31
+[ 2026-04-06 21:32:30,142 ] 218 root - INFO - Validation error message:  Train dataframe does not contain all columns. 
+ Test dataframe does not contain all columns. 
+
+[ 2026-04-06 21:32:30,142 ] 116 root - INFO - Checking for data drift...
+[ 2026-04-06 21:32:30,388 ] 230 root - INFO - Validated train and test data saved successfully
+[ 2026-04-06 21:32:30,389 ] 62 root - INFO - Data Validation completed
+[ 2026-04-06 21:32:30,389 ] 70 root - INFO - Data Transformation started
+[ 2026-04-06 21:32:30,390 ] 104 root - INFO - Entered initiate_data_transformation method of DataTransformation class
+[ 2026-04-06 21:32:30,390 ] 107 root - INFO - Starting data transformation
+[ 2026-04-06 21:32:30,485 ] 80 root - INFO - Entered get_data_transformer_object of Transformation class
+[ 2026-04-06 21:32:30,485 ] 88 root - INFO - Initialized KNNImputer with {'missing_values': nan, 'n_neighbors': 3, 'weights': 'uniform'}
+[ 2026-04-06 21:32:30,502 ] 106 root - INFO - Entered the save object method of MainUtils class
+[ 2026-04-06 21:32:30,506 ] 124 root - INFO - Exited save object method of MainUtils class
+[ 2026-04-06 21:32:30,506 ] 193 root - INFO - Data Transformation completed successfully
+[ 2026-04-06 21:32:30,507 ] 74 root - INFO - Data Transformation completed
+[ 2026-04-06 21:32:30,508 ] 77 root - INFO - Model training started
+[ 2026-04-06 21:32:30,534 ] 177 root - INFO - Training and tuning model: Random Forest
+[ 2026-04-06 21:32:50,596 ] 215 root - INFO - Random Forest | Test R2 Score: 0.8937440238367093
+[ 2026-04-06 21:32:50,596 ] 177 root - INFO - Training and tuning model: Decision Tree
+[ 2026-04-06 21:32:51,010 ] 215 root - INFO - Decision Tree | Test R2 Score: 0.8277920386319082
+[ 2026-04-06 21:32:51,010 ] 177 root - INFO - Training and tuning model: Gradient Boosting
+[ 2026-04-06 21:36:05,770 ] 215 root - INFO - Gradient Boosting | Test R2 Score: 0.8003120447965744
+[ 2026-04-06 21:36:05,770 ] 177 root - INFO - Training and tuning model: Logistic Regression
+[ 2026-04-06 21:36:06,082 ] 215 root - INFO - Logistic Regression | Test R2 Score: 0.6995520674003504
+[ 2026-04-06 21:36:06,082 ] 177 root - INFO - Training and tuning model: AdaBoost
+[ 2026-04-06 21:36:13,127 ] 215 root - INFO - AdaBoost | Test R2 Score: 0.6940560686332836
+[ 2026-04-06 21:36:13,167 ] 139 root - INFO - Best model: Random Forest | R2 Score: 0.8937440238367093
+[ 2026-04-06 21:36:13,168 ] 147 root - INFO - Best model: Random Forest with score: 0.8937440238367093
+[ 2026-04-06 21:36:13,643 ] 106 root - INFO - Entered the save object method of MainUtils class
+[ 2026-04-06 21:36:13,746 ] 124 root - INFO - Exited save object method of MainUtils class
+[ 2026-04-06 21:36:13,746 ] 106 root - INFO - Entered the save object method of MainUtils class
+[ 2026-04-06 21:36:13,804 ] 124 root - INFO - Exited save object method of MainUtils class
+[ 2026-04-06 21:36:13,805 ] 194 root - INFO - Model Trainer Artifact: ModelTrainerArtifact(trained_model_file_path='Artifacts\\04_06_2026_21_32_25\\model_trainer\\trained_model\\model.pkl', train_metric_artifact=ClassificationMetricArtifact(f1_score=0.991297308237199, precision_score=0.9886960032297134, recall_score=0.9939123376623377), test_metric_artifact=ClassificationMetricArtifact(f1_score=0.9765561843168957, precision_score=0.970281124497992, recall_score=0.9829129373474369))
+[ 2026-04-06 21:36:13,811 ] 81 root - INFO - Model training completed

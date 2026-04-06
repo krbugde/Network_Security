@@ -1,6 +1,6 @@
 # Import DataIngestion component to load and split data
 from networksecurity.components.data_ingestion import DataIngestion
-
+from networksecurity.components.model_trainer import ModelTrainer
 # Import custom exception for detailed error messages
 from networksecurity.exception.exception import CustomException
 
@@ -9,7 +9,7 @@ from networksecurity.logging.logger import logging
 
 # Import config entities for pipeline, ingestion and validation settings
 from networksecurity.entity.config_entity import DataIngestionConfig, DataValidationConfig,DataTransformationConfig
-from networksecurity.entity.config_entity import TrainingPipelineConfig
+from networksecurity.entity.config_entity import TrainingPipelineConfig,ModelTrainerConfig
 
 # Import DataValidation component to validate the ingested data
 from networksecurity.components.data_validation import DataValidation
@@ -74,7 +74,12 @@ if __name__ == '__main__':
         logging.info("Data Transformation completed")
 
         print(data_transformation_artifact)
-    
+        logging.info("Model training started")
+        model_trainer_config=ModelTrainerConfig(trainingpipelineconfig)
+        model_trainer=ModelTrainer(model_trainer_config,data_transformation_artifact)
+        model_trainer_artifact=model_trainer.initiate_model_trainer()
+        logging.info("Model training completed")
+        print(model_trainer_artifact)
     
     except Exception as e:
         raise CustomException(e, sys)

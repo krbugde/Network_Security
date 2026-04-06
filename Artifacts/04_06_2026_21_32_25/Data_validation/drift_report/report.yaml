@@ -1,0 +1,93 @@
+Abnormal_URL:
+  drift_status: false
+  p_value: 0.9914952304622426
+DNSRecord:
+  drift_status: false
+  p_value: 0.5890956201196135
+Domain_registeration_length:
+  drift_status: false
+  p_value: 0.8622798411449777
+Favicon:
+  drift_status: false
+  p_value: 0.9563660841655501
+Google_Index:
+  drift_status: false
+  p_value: 1.0
+HTTPS_token:
+  drift_status: false
+  p_value: 0.998821814236978
+Iframe:
+  drift_status: false
+  p_value: 0.999931781258988
+Links_in_tags:
+  drift_status: false
+  p_value: 0.9236254567999284
+Links_pointing_to_page:
+  drift_status: false
+  p_value: 0.6129588906774134
+Page_Rank:
+  drift_status: false
+  p_value: 1.0
+Prefix_Suffix:
+  drift_status: false
+  p_value: 1.0
+Redirect:
+  drift_status: false
+  p_value: 0.8622798411449777
+Request_URL:
+  drift_status: false
+  p_value: 0.8979221700912247
+Result:
+  drift_status: false
+  p_value: 1.0
+RightClick:
+  drift_status: false
+  p_value: 1.0
+SFH:
+  drift_status: false
+  p_value: 0.8291361447554398
+SSLfinal_State:
+  drift_status: false
+  p_value: 0.9999999999876384
+Shortining_Service:
+  drift_status: false
+  p_value: 0.918796249345484
+Statistical_report:
+  drift_status: false
+  p_value: 0.999999999999956
+Submitting_to_email:
+  drift_status: false
+  p_value: 0.8291361447554398
+URL_Length:
+  drift_status: false
+  p_value: 0.9999999999598222
+URL_of_Anchor:
+  drift_status: false
+  p_value: 0.9990438890770315
+age_of_domain:
+  drift_status: false
+  p_value: 1.0
+double_slash_redirecting:
+  drift_status: false
+  p_value: 0.8923284435665428
+having_At_Symbol:
+  drift_status: false
+  p_value: 1.0
+having_IP_Address:
+  drift_status: false
+  p_value: 0.7860683696901033
+having_Sub_Domain:
+  drift_status: false
+  p_value: 0.8151359073090507
+on_mouseover:
+  drift_status: false
+  p_value: 0.9453319119697715
+popUpWidnow:
+  drift_status: false
+  p_value: 0.9997064605886263
+port:
+  drift_status: false
+  p_value: 0.9974838014331485
+web_traffic:
+  drift_status: false
+  p_value: 1.0
