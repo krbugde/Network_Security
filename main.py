@@ -8,11 +8,12 @@ from networksecurity.exception.exception import CustomException
 from networksecurity.logging.logger import logging
 
 # Import config entities for pipeline, ingestion and validation settings
-from networksecurity.entity.config_entity import DataIngestionConfig, DataValidationConfig
+from networksecurity.entity.config_entity import DataIngestionConfig, DataValidationConfig,DataTransformationConfig
 from networksecurity.entity.config_entity import TrainingPipelineConfig
 
 # Import DataValidation component to validate the ingested data
 from networksecurity.components.data_validation import DataValidation
+from networksecurity.components.data_transformation import DataTransformation
 
 # Import sys for error handling in CustomException
 import sys
@@ -65,5 +66,15 @@ if __name__ == '__main__':
         print ("valid test file path:",data_validation_artifact.valid_test_file_path)
         print("invalid train file path: ",data_validation_artifact.invalid_train_file_path)
         print("invalid test file path: ",data_validation_artifact.invalid_test_file_path)
+
+        logging.info("Data Transformation started")
+        data_transformation_config=DataTransformationConfig(trainingpipelineconfig)
+        data_transformation=DataTransformation(data_validation_artifact,data_transformation_config)
+        data_transformation_artifact=data_transformation.initiate_data_transformation()
+        logging.info("Data Transformation completed")
+
+        print(data_transformation_artifact)
+    
+    
     except Exception as e:
         raise CustomException(e, sys)

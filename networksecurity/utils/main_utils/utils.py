@@ -57,3 +57,71 @@ def write_yaml_file(file_path: str, content: object, replace: bool = False) -> N
     except Exception as e:
         # If any error occurs, raise detailed CustomException
         raise CustomException(e, sys)
+    
+
+
+
+
+# Function to save a numpy array to a file
+# file_path → location where the numpy array will be saved
+# array     → the numpy array we want to save
+# np.array  → type hint indicating input should be a numpy array
+def save_numpy_array_data(file_path: str, array: np.array):
+    try:
+        # Extract only the folder path from the full file path
+        # Example: "artifacts/data/train.npy" → "artifacts/data"
+        dir_path = os.path.dirname(file_path)
+
+        # Create the folder if it doesn't already exist
+        # exist_ok=True → no error if folder already exists
+        os.makedirs(dir_path, exist_ok=True)
+
+        # Open the file in write binary mode ("wb")
+        # "wb" → write binary — needed because numpy saves in binary format
+        # not plain text, so we use "wb" not "w"
+        with open(file_path, "wb") as file_obj:
+
+            # Save the numpy array into the file in .npy binary format
+            # np.save() converts array → binary and writes to file
+            np.save(file_obj, array)
+
+    except Exception as e:
+        # If any error occurs, raise detailed CustomException
+        # showing file name, line number and error message
+        raise CustomException(e, sys)
+    
+
+
+
+# Function to save any Python object to a file using pickle
+# file_path → location where the object will be saved
+# obj       → any Python object to save
+#             (model, transformer, encoder, scaler, etc.)
+# -> None   → this function returns nothing
+def save_object(file_path: str, obj: object) -> None:
+    try:
+        # Log that we have entered this function
+        logging.info("Entered the save object method of MainUtils class")
+
+        # Extract folder path from full file path and create it if not exists
+        # Example: "artifacts/model/model.pkl" → "artifacts/model"
+        # exist_ok=True → no error if folder already exists
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+
+        # Open the file in write binary mode ("wb")
+        # "wb" → write binary — needed because pickle saves in binary format
+        with open(file_path, "wb") as file_obj:
+
+            # Serialize the Python object and save it to the file
+            # pickle.dump() converts any Python object → binary format
+            # and writes it into the file
+            # Example: saves ML model, scaler, encoder as .pkl file
+            pickle.dump(obj, file_obj)
+
+        # Log that we have successfully exited this function
+        logging.info("Exited save object method of MainUtils class")
+
+    except Exception as e:
+        # If any error occurs, raise detailed CustomException
+        # showing file name, line number and error message
+        raise CustomException(e, sys)

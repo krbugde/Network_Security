@@ -12,7 +12,6 @@ fastapi
 uvicorn
 python-multipart
 matplotlib
-dill
 pyaml
 pymongo[srv]==3.12
 # -e . 
