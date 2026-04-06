@@ -15,6 +15,9 @@ FILE_NAME="phisingData.csv"
 TRAIN_FILE_NAME="train.csv"
 TEST_FILE_NAME="test.csv"
 
+SCHEMA_FILE_PATH = os.path.join("data_schema","schema.yaml")
+# there will be folder named data_schema,inside it there will be file schema.yaml
+
 
 
 """
