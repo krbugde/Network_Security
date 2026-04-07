@@ -1,278 +1,138 @@
 # Network Security - Phishing Data Detection
 
-A comprehensive machine learning pipeline for detecting and classifying phishing network traffic and security threats. This project implements an end-to-end ML workflow with data ingestion, validation, transformation, and model training components.
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Features](#features)
-- [Project Structure](#project-structure)
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Usage](#usage)
-- [Pipeline Architecture](#pipeline-architecture)
-- [Components](#components)
-- [Requirements](#requirements)
-- [Author](#author)
+A machine learning pipeline for detecting and classifying phishing network data. This project fetches data from MongoDB, validates it, applies transformations, and trains ML models with experiment tracking.
 
 ## Overview
 
-This project provides a production-ready machine learning pipeline for network security threat detection, specifically focusing on phishing classification. It fetches network security data from MongoDB, performs comprehensive data validation, applies transformations, and trains machine learning models with automatic drift detection and monitoring.
-
-### Key Features:
-
-- **Automated Data Pipeline**: Streamlined data flow from MongoDB to model training
-- **Data Validation**: Drift detection and data quality checks
-- **Model Training**: Multiple algorithms with hyperparameter tuning using GridSearchCV
-- **Experiment Tracking**: MLflow integration for tracking models and metrics
-- **REST API**: FastAPI endpoints for model serving
-- **Error Handling**: Custom exception handling and comprehensive logging
-- **Reproducibility**: Structured configuration management and artifact versioning
-
-## Features
-
-✅ **Data Ingestion**
-- Connects to MongoDB for data retrieval
-- Automatic train-test splitting with configurable ratios
-- CSV export for processed data
-
-✅ **Data Validation**
-- Schema validation against defined YAML schemas
-- Data drift detection reports
-- Data quality checks
-- Automated validation workflow
-
-✅ **Data Transformation**
-- Feature preprocessing and normalization
-- Scaling and encoding transformations
-- Artifact management for reproducibility
-
-✅ **Model Training**
-- Multiple algorithm support (Random Forest, Gradient Boosting, etc.)
-- Hyperparameter tuning with GridSearchCV
-- Automated model evaluation and selection
-- Performance metrics computation
-
-✅ **Experiment Tracking**
-- MLflow integration for experiment management
-- DagsHub integration for model versioning
-- Artifact and model storage
-
-✅ **API Deployment**
-- FastAPI for serving predictions
-- RESTful endpoints for inference
+This project implements an end-to-end ML pipeline for phishing classification:
+1. **Data Ingestion** - Retrieves phishing data from MongoDB and splits into train/test sets
+2. **Data Validation** - Validates data schema and detects data drift
+3. **Data Transformation** - Applies preprocessing and feature scaling
+4. **Model Training** - Trains and evaluates multiple ML models
+5. **Experiment Tracking** - Tracks experiments with MLflow
 
 ## Project Structure
 
 ```
 NetworkSecurity/
-│
 ├── networksecurity/
-│   ├── __init__.py
 │   ├── components/
-│   │   ├── data_ingestion.py       # MongoDB data retrieval & train-test split
-│   │   ├── data_validation.py      # Schema validation & drift detection
-│   │   ├── data_transformation.py  # Feature engineering & preprocessing
-│   │   └── model_trainer.py        # Model training & evaluation
-│   │
+│   │   ├── data_ingestion.py       # Fetch data from MongoDB
+│   │   ├── data_validation.py      # Validate schema and detect drift
+│   │   ├── data_transformation.py  # Preprocess and scale features
+│   │   └── model_trainer.py        # Train ML models
 │   ├── entity/
 │   │   ├── config_entity.py        # Configuration classes
 │   │   └── artifact_entity.py      # Output artifact definitions
-│   │
-│   ├── constant/
-│   │   └── training_pipeline/      # Pipeline constants
-│   │
 │   ├── exception/
-│   │   └── exception.py            # Custom exception class
-│   │
+│   │   └── exception.py            # Custom exception handling
 │   ├── logging/
-│   │   └── logger.py               # Logging configuration
-│   │
-│   ├── pipeline/
-│   │   └── __init__.py
-│   │
-│   ├── utils/
-│   │   ├── main_utils/
-│   │   │   └── utils.py            # Utility functions
-│   │   └── ml_utils/
-│   │       ├── metric/
-│   │       │   └── classification_metric.py
-│   │       └── model/
-│   │           └── estimator.py
-│   │
-│   └── cloud/
-│       └── __init__.py
-│
+│   │   └── logger.py               # Logging setup
+│   └── utils/
+│       ├── main_utils/
+│       │   └── utils.py
+│       └── ml_utils/
+│           ├── metric/
+│           └── model/
 ├── data_schema/
 │   └── schema.yaml                 # Data validation schema
-│
+├── Artifacts/                      # Pipeline outputs (timestamped)
 ├── logs/                           # Application logs
 ├── final_model/                    # Trained model storage
-├── Artifacts/                      # Timestamped pipeline outputs
-│
-├── main.py                         # Training pipeline entry point
-├── push_data.py                    # Data upload to MongoDB
-├── test_mongodb.py                 # MongoDB connection test
-│
-├── requirements.txt                # Project dependencies
-├── setup.py                        # Package configuration
-├── Dockerfile                      # Container configuration
-│
-└── notebooks/                      # Jupyter notebooks for exploration
+├── main.py                         # Run the complete pipeline
+├── push_data.py                    # Upload data to MongoDB
+├── test_mongodb.py                 # Test MongoDB connection
+├── requirements.txt                # Dependencies
+└── setup.py                        # Package setup
 ```
 
 ## Installation
 
-### Prerequisites
-- Python 3.8 or higher
-- MongoDB instance (local or cloud)
-- pip package manager
-
-### Steps
-
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd NetworkSecurity
-   ```
-
-2. **Create a virtual environment** (recommended)
+1. **Create a virtual environment**
    ```bash
    python -m venv venv
    source venv/bin/activate    # On Windows: venv\Scripts\activate
    ```
 
-3. **Install dependencies**
+2. **Install dependencies**
    ```bash
    pip install -r requirements.txt
    pip install -e .
    ```
 
-## Configuration
-
-### Environment Variables
-
-Create a `.env` file in the project root with:
-
-```env
-MONGO_DB_URL=mongodb://<username>:<password>@<host>:<port>/<database>
-```
-
-### Schema Configuration
-
-Update `data_schema/schema.yaml` with your data validation schema. Example format:
-
-```yaml
-properties:
-  feature_1:
-    type: number
-  feature_2:
-    type: string
-required:
-  - feature_1
-  - feature_2
-```
-
-### Pipeline Configuration
-
-Modify `data_ingestion` configuration in `networksecurity/entity/config_entity.py`:
-- MongoDB connection settings
-- Train-test split ratio (default: 80-20)
-- Data paths and artifact directories
+3. **Set up MongoDB connection**
+   Create a `.env` file in the project root:
+   ```
+   MONGO_DB_URL=mongodb://<username>:<password>@<host>:<port>/<database>
+   ```
 
 ## Usage
 
-### Run the Complete Training Pipeline
-
+**Run the complete training pipeline:**
 ```bash
 python main.py
 ```
 
-This will execute:
-1. **Data Ingestion** - Fetch data from MongoDB and create train/test splits
-2. **Data Validation** - Validate data schema and detect drift
-3. **Data Transformation** - Apply preprocessing and normalization
-4. **Model Training** - Train and evaluate multiple models
+This executes all stages:
+- Data Ingestion (MongoDB → train/test CSV)
+- Data Validation (schema check, drift detection)
+- Data Transformation (preprocessing & scaling)
+- Model Training (train models, save best model)
 
-### Upload Data to MongoDB
-
+**Upload data to MongoDB:**
 ```bash
 python push_data.py
 ```
 
-### Test MongoDB Connection
-
+**Test MongoDB connection:**
 ```bash
 python test_mongodb.py
 ```
 
-## Pipeline Architecture
-
-```
-┌─────────────────────┐
-│  Data Ingestion     │ ← MongoDB
-├─────────────────────┤
-│ Training Pipeline   │
-│   Config            │
-├─────────────────────┤
-│ Data Validation     │ → Drift Report
-├─────────────────────┤
-│ Data Transformation │ → Transformed Data
-├─────────────────────┤
-│ Model Trainer       │ → Trained Model
-├─────────────────────┤
-│ MLflow Tracking     │
-└─────────────────────┘
-```
-
 ## Components
 
-### Data Ingestion
-- **File**: `networksecurity/components/data_ingestion.py`
-- **Function**: Retrieves data from MongoDB, performs stratified train-test split
-- **Output**: CSV files for train and test sets
+**Data Ingestion** (`data_ingestion.py`)
+- Connects to MongoDB and retrieves phishing data
+- Splits data into train (80%) and test (20%) sets
+- Saves CSV files to `Artifacts/data_ingestion/`
 
-### Data Validation
-- **File**: `networksecurity/components/data_validation.py`
-- **Function**: Validates data against schema, generates drift reports
-- **Output**: Validation reports and drift analysis
+**Data Validation** (`data_validation.py`)
+- Validates data schema against `data_schema/schema.yaml`
+- Generates drift detection report
+- Saves validated data to `Artifacts/Data_validation/`
 
-### Data Transformation
-- **File**: `networksecurity/components/data_transformation.py`
-- **Function**: Feature scaling, normalization, and preprocessing
-- **Output**: NumPy arrays for model training
+**Data Transformation** (`data_transformation.py`)
+- Preprocessing and feature scaling
+- Converts data to NumPy arrays
+- Saves transformed data to `Artifacts/Data_transformation/`
 
-### Model Trainer
-- **File**: `networksecurity/components/model_trainer.py`
-- **Function**: Trains multiple models, evaluates performance, selects best model
-- **Output**: Trained model pickle file and performance metrics
+**Model Trainer** (`model_trainer.py`)
+- Trains multiple ML models with GridSearchCV
+- Evaluates performance metrics
+- Saves best model to `final_model/`
+- Tracks experiments in MLflow
 
-## Requirements
+## Dependencies
 
-Key dependencies:
 - `pandas` - Data manipulation
 - `numpy` - Numerical computing
-- `scikit-learn` - Machine learning algorithms
-- `pymongo` - MongoDB connectivity
+- `scikit-learn` - ML algorithms
+- `pymongo` - MongoDB connection
 - `mlflow` - Experiment tracking
-- `fastapi` - REST API framework
-- `uvicorn` - ASGI server
-- `python-dotenv` - Environment variable management
-- `pyaml` - YAML parsing
-- `dagshub` - Model versioning
+- `pyaml` - YAML handling
+- `python-dotenv` - Environment variables
 
-See [requirements.txt](requirements.txt) for complete list with versions.
+See `requirements.txt` for complete list.
 
-## Example Output
+## Output
 
-After running `main.py`, artifacts are timestamped in the `Artifacts/` directory:
+Pipeline outputs are saved in timestamped directories under `Artifacts/`:
 
 ```
 Artifacts/
 └── 04_06_2026_21_32_25/
     ├── data_ingestion/
-    │   └── feature_store/
-    │       └── phishingData.csv
+    │   └── train.csv, test.csv
     ├── Data_validation/
     │   ├── validated/
     │   └── drift_report/
@@ -282,87 +142,10 @@ Artifacts/
         └── trained_model/
 ```
 
-## API Deployment
-
-To run the FastAPI server for model serving:
-
-```bash
-uvicorn main:app --reload
-```
-
-Access the API documentation at `http://localhost:8000/docs`
-
-## Docker
-
-Build and run the Docker container:
-
-```bash
-docker build -t network-security .
-docker run -p 8000:8000 network-security
-```
-
-## Logging
-
-Logs are stored in the `logs/` directory with timestamps. Check logs for debugging and monitoring:
-
-```bash
-tail -f logs/application.log
-```
-
-## Best Practices
-
-- Always activate the virtual environment before development
-- Keep `.env` file secure and never commit it
-- Review drift reports regularly
-- Monitor MLflow experiments at `/mlruns`
-- Update requirements.txt after adding new dependencies: `pip freeze > requirements.txt`
-
-## Troubleshooting
-
-**MongoDB Connection Issues**
-- Verify MONGO_DB_URL in `.env` file
-- Check network connectivity and firewall rules
-- Run `python test_mongodb.py` to test connection
-
-**Data Validation Failures**
-- Check `data_schema/schema.yaml` matches your data
-- Review drift reports in `Artifacts/*/Data_validation/drift_report/`
-
-**Model Training Errors**
-- Ensure data transformation artifacts exist
-- Check available memory for model training
-- Review logs in `logs/` directory
-
-## Performance Monitoring
-
-Track experiment metrics using MLflow:
-
-```bash
-mlflow ui
-```
-
-Access at `http://localhost:5000`
-
-## Contributing
-
-1. Create a new branch for features
-2. Follow the existing code structure
-3. Add comprehensive logging
-4. Update README for significant changes
+Trained model is also saved to `final_model/`
 
 ## Author
 
-**Kumudini Bugde**
-- Email: kumudinibugde@gmail.com
+**Kumudini Bugde**  
+Email: kumudinibugde@gmail.com
 
-## License
-
-[Add your license here]
-
-## Version
-
-Current Version: 0.0.1
-
----
-
-**Last Updated**: April 2026
